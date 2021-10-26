@@ -14,12 +14,17 @@ import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.example.conectividad.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
     if(ContextCompat.checkSelfPermission(this,
         Manifest.permission.ACTIVITY_RECOGNITION)==PackageManager.PERMISSION_DENIED){
@@ -27,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    val sensorPasos: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+    val sensorPasos: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR)
     Log.d("SensorExample",sensorPasos.toString())
 
 
@@ -37,6 +42,10 @@ class MainActivity : AppCompatActivity() {
             for(value in sensorEvent.values){
                 pasos += value
             }
+            Log.d("SensorExamples","Pasos: $pasos")
+
+            binding.etPasos.setText("$pasos")
+
         }
 
         override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
